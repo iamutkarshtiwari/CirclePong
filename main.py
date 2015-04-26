@@ -78,9 +78,10 @@ class game:
         
         
         pad2=pad=pygame.image.load("data/images/pad.png")           # pad transform
-        pad=pygame.transform.rotate(pad, angle)
-        
         pad2=pad=pygame.transform.scale(pad,(120,20))
+        pad=pygame.transform.rotate(pad,angle)
+        
+        
         
         color=(255,255,255)
         
@@ -100,6 +101,7 @@ class game:
         f1=f2=0
         
         xrightflag=-1
+        upperhalf=0
         xcor=625
         
         padangle=0
@@ -122,7 +124,7 @@ class game:
                 
             gameDisplay.fill(black)
             
-            print(event)
+            #print(event)
             
                                             ## Color control begins ##
             if(xcf==0):
@@ -166,7 +168,7 @@ class game:
             
             pygame.draw.circle(gameDisplay,white,(683,384),5,0)
             
-            #pad=pygame.transform.rotate(pad2, angle)
+            pad=pygame.transform.rotate(pad2, angle)
             gameDisplay.blit(pad,(xcor,555))
             
             '''
@@ -183,49 +185,60 @@ class game:
                 angle=-1
             '''
             
-            if event.type==pygame.KEYDOWN and event.key==276 and f1==0:
+            '''
+            if event.type==pygame.KEYDOWN and event.key==275 and f1==0:
                 
                 f1=1
+                
                 xrightflag=1
                 
-            if event.type==pygame.KEYDOWN and event.key==275 and f2==0:
+            if event.type==pygame.KEYDOWN and event.key==276 and f2==0:
                 
                 f2=1
+                
                 xrightflag=0
                 
                       #start moving
+            '''          
                       
                       
-                      
-            if(xcor>=805 and xrightflag!=-1):
-                xrightflag=0
+            if(xcor>=805 and xrightflag!=-1 ):
+                #xrightflag=0
+                upperhalf=not(upperhalf)
+                
+            
                 
                 
-            if(xcor<=445 and xrightflag!=-1):
-                xrightflag=1
+            if(xcor<=445 and xrightflag!=-1 ):
+                #xrightflag=1
+                upperhalf=not(upperhalf)
+                
+            
                 
                 
-            if(xrightflag==1):
-                xcor+=1
-            if(xrightflag==0):
-                xcor-=1
+            if(upperhalf==0):               # Down Case
+                if(xrightflag==1):
+                    xcor+=1
+                if(xrightflag==0):
+                    xcor-=1
+            if(upperhalf==1):               # Upper Case
+                if(xrightflag==1):
+                    xcor-=1
+                if(xrightflag==0):
+                    xcor+=1
+                
                 
                 
            
-            if(f1==1):
+            if(f1==1 and f2==0):
                 angle+=1
-                
-                    
-                    
             
-                
-            
-            if(f2==1):
+            if(f2==1 and f1==0):
                 angle-=1
             
                   
                 
-                
+            '''    
             if event.type==pygame.KEYUP and event.key==276 and f1==1:
                 
                 f1=0
@@ -236,7 +249,32 @@ class game:
                 
                 f2=0
                 xrightflag=-1
+            '''
+            
+            
+            press=pygame.key.get_pressed()
+            
+            #print press
+            if(press[len(press)-47]):               #left key press check
+                print "left" 
+                xrightflag=0
+                f1=1
+                f2=0
+            
+             
+             
+            if(press[len(press)-48]):               #right key press check
+                print "right"  
+                xrightflag=1
+                f1=0
+                f2=1
+            
                 
+                
+            if(press[len(press)-47]==0 and press[len(press)-48]==0 ):
+                
+                xrightflag=-1
+             
             
             
             #gameDisplay.blit(circle)
