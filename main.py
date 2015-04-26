@@ -1,133 +1,108 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#
+# Circle Pong Challenge
+# Copyright (C) 2015  Utkarsh Tiwari
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# Contact information:
+# Utkarsh Tiwari    iamutkarshtiwari@gmail.com
 
+
+
+import os
 import gtk
 import pickle
 import pygame
 import sys
-from random import *
-
-'''
-     
-pygame.init()
-sound=True
-        
-try:
-    pygame.mixer.init()
-except Exception, err:
-    sound=False
-    print 'error with sound', error
-            
-black=(0,0,0)
-white=(255,255,255)
-clock=pygame.time.Clock()
-timer=pygame.time.Clock()
-            
-crashed=False   
-disp_width = 600
-disp_height = 600
-            
-press=0    
-            
-gameDisplay=pygame.display.get_surface()
-        
-if not(gameDisplay):
-    info=pygame.display.Info()
-    gameDisplay = pygame.display.set_mode((info.current_w,info.current_h))
-            
-    pygame.display.set_caption("Make Them Fall")
-    gameicon=pygame.image.load('data/images/icon.png')
-    pygame.display.set_icon(gameicon)
-            
-'''
 
 
-class pane5window:
+
+
+
+
+class game:
     
-    def run(self,gameDisplay,info):
-        
-        crashed=False 
-        orientation1=0
-        orientation2=0
-        orientation3=0
-        orientation4=0
-        orientation5=0
-        orientation6=0
-        
-        leftmove=leftdownmove=350
-        rightdownmove=659
-        midmove=555
-        rightmove=761
-        
-        limit1=limit2=0
-        
-        
-        leftman=pygame.image.load("data/images/man.png")
-        rightman=pygame.transform.flip(leftman,True,False)
-        background=pygame.image.load("data/images/up3.png")
-        background1=pygame.image.load("data/images/down2.png")
-        
-        lspike=pygame.image.load("data/images/Spike.png")
-        rspike=pygame.transform.flip(lspike,True,False) 
-        
-        background=pygame.transform.scale(background,(600,info.current_h/2))
-        background1=pygame.transform.scale(background1,(600,info.current_h/2))
-        
-        
-        y_axis1=400+100
-        y_axis2=700+80
-        
-        
-        y_axisa=430+150
-        y_axisb=700+150
-        
-        y_axisx=460+80
+    def make(self):
         
         
         
+        pygame.init()
+        sound=True
         
-        leftquad=leftman
-        midquad=leftman
-        rightquad=leftman
-        
-        leftdown=leftman
-        rightdown=leftman
-        
-        
-        
-        f1=f2=f3=f4=f5=0
-        m1=m2=m3=m4=m5=0
-        time1=time2=0
-        
-        font_path = "fonts/comicsans.ttf"
-        font_size = 50
-        font1= pygame.font.Font(font_path, font_size)
-        score=0
-           
-        x_axis1=x_axis2=350
-        x_axisa=x_axisb=659
-        x_axisx=x_axisy=761
-        speed=4
-        flag=1
-        
-        
+        try:
+            pygame.mixer.init()
+        except Exception, err:
+            sound=False
+            print 'error with sound', err
+            
         black=(0,0,0)
         white=(255,255,255)
         clock=pygame.time.Clock()
         timer=pygame.time.Clock()
             
-  
-           
-        sound = True
-        try:
-            pygame.mixer.init()
-        except Exception, err:
-            sound = False
-            print 'error with sound', err   
+        crashed=False   
+        disp_width = 600
+        disp_height = 600
+            
+        press=0    
         
-        jump=pygame.mixer.Sound("data/sound/jump.wav")
-        scoremusic=pygame.mixer.Sound("data/sound/score.wav")
-        collide=pygame.mixer.Sound("data/sound/fall.wav")
-           
+        info=pygame.display.Info()
+        gameDisplay=pygame.display.get_surface()
         
+        
+        if not(gameDisplay):
+            
+            gameDisplay = pygame.display.set_mode((info.current_w,info.current_h))
+            
+            pygame.display.set_caption("Make Them Fall")
+            #gameicon=pygame.image.load('data/images/icon.png')
+            #pygame.display.set_icon(gameicon)
+            
+            
+        angle=0                                                        # Loading assets
+        ball=pygame.image.load("data/images/ball.png")
+        pygame.draw.circle(gameDisplay,white,(100,100),10,0)
+        
+        
+        pad2=pad=pygame.image.load("data/images/pad.png")           # pad transform
+        pad=pygame.transform.rotate(pad, angle)
+        
+        pad2=pad=pygame.transform.scale(pad,(120,20))
+        
+        color=(255,255,255)
+        
+        
+        font_path = "fonts/arial.ttf"
+        font_size = 18
+        font1= pygame.font.Font(font_path, font_size)
+        font1.set_bold(True)
+        i=0
+        j=0
+        
+        xcolor=0
+        ycolor=210
+        zcolor=0
+        
+        xcf=ycf=zcf=0
+        f1=f2=0
+        
+        xrightflag=-1
+        xcor=625
+        
+        padangle=0
         
         while not crashed:
         #Gtk events
@@ -137,443 +112,198 @@ class pane5window:
             event=pygame.event.poll()
             #totaltime+=timer.tick()
             if event.type == pygame.QUIT:
-                #totaltime+=timer.tick()
                 crashed=True
+                
+            
+            mos_x,mos_y=pygame.mouse.get_pos() 
             
             #print event
-               
             
-            
+                
             gameDisplay.fill(black)
-            gameDisplay.blit(background,(0+350,0))
+            
+            print(event)
+            
+                                            ## Color control begins ##
+            if(xcf==0):
+                xcolor+=2
+            else:
+                xcolor-=3
+            
+            if(ycf==0):
+                ycolor-=1
+            else:
+                ycolor+=3
+                
+            if(zcf==0):    
+                zcolor+=2
+            else:
+                zcolor-=1
+            
+            if(xcolor>=240):
+                xcf=1
+            if(xcolor<=25):
+                xcf=0    
+                
+                
+            if(ycolor<=25):
+                ycf=1
+            if(ycolor>=240):
+                ycf=0    
+                
+                
+            if(zcolor>=240):
+                zcf=1
+            if(zcolor<=25):
+                zcf=0
             
             
-               
+            color=(xcolor,ycolor,zcolor)
+                
+            pygame.draw.rect(gameDisplay, color,(40,40,100,20), 0) 
+            #pygame.draw.circle(gameDisplay,white,(683,384),180,0)
+            pygame.draw.circle(gameDisplay,color,(683,384),180,0)                           # Center big circle control
             
+            pygame.draw.circle(gameDisplay,white,(683,384),5,0)
             
-            # Keypress orientation change
+            #pad=pygame.transform.rotate(pad2, angle)
+            gameDisplay.blit(pad,(xcor,555))
             
-            if event.type==pygame.KEYDOWN and event.key==97 and f1==0:
-                jump.play(0)
+            '''
+            if(angle>=359 and f1==1):
+                angle=0
+                
+            if(angle<=1 and f2==1):
+                angle=360
+                
+            if(angle>=(-1) and f1==1):
+                angle=-360
+                
+            if(angle<=(-359) and f2==1):
+                angle=-1
+            '''
+            
+            if event.type==pygame.KEYDOWN and event.key==276 and f1==0:
+                
                 f1=1
-                m1=1        #start moving
+                xrightflag=1
                 
+            if event.type==pygame.KEYDOWN and event.key==275 and f2==0:
                 
-                    
-                    
-            if event.type==pygame.KEYDOWN and event.key==115 and f2==0:
-                jump.play(0)
                 f2=1
-                m2=1        #start moving
+                xrightflag=0
                 
-             
-            if event.type==pygame.KEYDOWN and event.key==100 and f3==0:
-                jump.play(0)
-                f3=1
-                m3=1        #start moving
+                      #start moving
+                      
+                      
+                      
+            if(xcor>=805 and xrightflag!=-1):
+                xrightflag=0
                 
                 
-            # down key structure
-                 
+            if(xcor<=445 and xrightflag!=-1):
+                xrightflag=1
+                
+                
+            if(xrightflag==1):
+                xcor+=1
+            if(xrightflag==0):
+                xcor-=1
+                
+                
+           
+            if(f1==1):
+                angle+=1
+                
                     
                     
-            if event.type==pygame.KEYDOWN and event.key==276 and f4==0:
-                jump.play(0)
-                f4=1
-                m4=1        #start moving
+            
                 
-             
-            if event.type==pygame.KEYDOWN and event.key==275 and f5==0:
-                jump.play(0)
-                f5=1
-                m5=1        #start moving
-                
-                
-                
-                
+            
+            if(f2==1):
+                angle-=1
+            
                   
-              
-                
-            # Check for when to stop
-            
-            if leftmove>484+20:         #left move
-                leftquad=rightman
-                m1=f1=0
-                leftmove=484+20
-                time1=0
-                
-            if leftmove<350:
-                leftquad=leftman
-                m1=f1=0
-                leftmove=350
-                time1=0
-                
-            if midmove<555:                 #mid move
-                midquad=leftman
-                m2=f2=0
-                midmove=555
-                time2=0
-                
-            if midmove>690+20:
-                midquad=rightman
-                m2=f2=0
-                midmove=690+20
-                time2=0 
-                
-               
-            if rightmove<761:               #right move move
-                rightquad=leftman
-                m3=f3=0
-                rightmove=761
-                time2=0
-                
-            if rightmove>761+156:
-                rightquad=rightman
-                m3=f3=0
-                rightmove=761+156
-                time2=0 
-            
-            
-            #down orintation change and stop moves
-            
-            if leftdownmove>608:
-                leftdown=rightman
-                m4=f4=0
-                leftdownmove=608
-                time1=0
-                
-            if leftdownmove<350:
-                leftdown=leftman
-                m4=f4=0
-                leftdownmove=350
-                time1=0
-                
-            if rightdownmove<659:
-                rightdown=leftman
-                m5=f5=0
-                rightdownmove=659
-                time2=0
-                
-            if rightdownmove>916:
-                rightdown=rightman
-                m5=f5=0
-                rightdownmove=916
-                time2=0 
-            
-            
-            
-           
-               
-            if m1==1:
-                
-                if leftquad==leftman:
-                    leftmove+=30
-                if leftquad==rightman:
-                    leftmove-=30
-                time1+=1
-            
-            if m2==1:
                 
                 
-                if midquad==leftman:
-                    midmove+=30
-                if midquad==rightman:
-                    midmove-=30
-                time2+=1
+            if event.type==pygame.KEYUP and event.key==276 and f1==1:
+                
+                f1=0
+                xrightflag=-1
                 
                 
-            if m3==1:
+            if event.type==pygame.KEYUP and event.key==275 and f2==1:
                 
-                
-                if rightquad==leftman:
-                    rightmove+=30
-                if rightquad==rightman:
-                    rightmove-=30
-                time2+=1
-                
-                
-            if m4==1:
-                
-                
-                if leftdown==leftman:
-                    leftdownmove+=30
-                if leftdown==rightman:
-                    leftdownmove-=30
-                time2+=1
-                
-                
-            if m5==1:
-                
-                
-                if rightdown==leftman:
-                    rightdownmove+=30
-                if rightdown==rightman:
-                    rightdownmove-=30
-                time2+=1
-                
-                
-               
-                
-                
-             
-            
-               
-                
-                
-            #[350,608]   [659, 916]
-            
-                
-                
-                
-                
-           
-            # up Guys Display
-            
-            if leftquad==leftman or leftquad==rightman:
-                gameDisplay.blit(leftquad,(leftmove,30))
-                
-             
-            if midquad==leftman or midquad==rightman:
-                gameDisplay.blit(midquad,(midmove,30))
-            
-            
-            if rightquad==leftman or rightquad==rightman:
-                gameDisplay.blit(rightquad,(rightmove,30))
-            
-            
-            ######### SPIKE PART###########
-            
-            
-            if orientation1==0:                     #orientation change
-                x_axis1=350
-                gameDisplay.blit(lspike,(x_axis1,y_axis1))
-            
-            if orientation1==1:
-                x_axis1=485
-                gameDisplay.blit(rspike,(x_axis1,y_axis1))
-                
+                f2=0
+                xrightflag=-1
                 
             
             
-            
-            # mid side spikes
-            if orientation3==0:
-                x_axisa=555
-                gameDisplay.blit(lspike,(x_axisa,y_axisa))
-            
-            if orientation3==1:
-                x_axisa=691
-                gameDisplay.blit(rspike,(x_axisa,y_axisa))
-            
-            
-            
-            
-            #right side spikes
-            
-            if orientation5==0:
-                x_axisx=761
-                gameDisplay.blit(lspike,(x_axisx,y_axisx))
-            
-            if orientation5==1:
-                x_axisx=761+136
-                gameDisplay.blit(rspike,(x_axisx,y_axisx))
-            
-            
-            
-            #bottom spikes
-            
-            if orientation2==0 and y_axis2>380:
-                x_axis2=350
-                gameDisplay.blit(lspike,(x_axis2,y_axis2))
-            
-            if orientation2==1 and y_axis2>380:
-                x_axis2=589
-                gameDisplay.blit(rspike,(x_axis2,y_axis2))
-            
-            
-            if orientation4==0 and y_axisb>380:
-                x_axisb=659
-                gameDisplay.blit(lspike,(x_axisb,y_axisb))
-            
-            if orientation4==1 and y_axisb>380:
-                x_axisb=659+238
-                gameDisplay.blit(rspike,(x_axisb,y_axisb))
-            
-                
-            
-            y_axis1-=speed
-            y_axis2-=speed
-            
-            
-            y_axisa-=speed
-            y_axisb-=speed
-            
-            y_axisx-=speed
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+            #gameDisplay.blit(circle)
+            #gameDisplay.blit(background,(350,0))
             
             
             '''
-            if score==25 or score==55 or score==70:
-                flag=1
             
-            if score==25 and flag==1 :
-                flag=0
-                speed+=0.1
-                
-            if score==55 and flag==1:
-                flag=0
-                speed+=0.1
-                
-            if score==70 and flag==1:
-                flag=0
-                speed+=0.1
-            '''    
-            
-            
-            
-            if y_axis1<=-40 or y_axis2<=380 or y_axisa<=-40 or y_axisb<=380 or \
-               y_axisx<=-40 :
-                scoremusic.play(0)
-                score+=1
-            
-            if(y_axis1<-40):
-                orientation1=randint(0,1)
-                   
-                y_axis1=400
-                
-            
-            if(y_axis2<380):
-                orientation2=randint(0,1)
+            if pane2.get_rect(center=(390+80+120,150+50)).collidepoint(mos_x,mos_y):            # 2 pane game
+                gameDisplay.blit(pygame.transform.scale(pane2,(420,90)),(385,150))
+                if(pygame.mouse.get_pressed())[0]==1 and press==0:
+                    #print 'yes'
+                    press=1
+                    while f==1:
+                        
+                        a=pane2window()
+                        a=a.run(gameDisplay,info)
                     
-                y_axis2=700
-            
-              
+                        f=scorewindow()
+                        f=f.run(gameDisplay,a,1)
+                        
+                        
+                        
+                     
+                        
+                    
                 
-            
-            if(y_axisa<-40):
-                orientation3=randint(0,1)
                 
-                y_axisa=400
                 
-            
-            if(y_axisb<380):
-                orientation4=randint(0,1)
-                
-                y_axisb=700
-                
-            
-            
-            
-            if(y_axisx<-40):
-                orientation5=randint(0,1)
-                
-                y_axisx=400
-                
-            
-            
-                
-            
-                
-            gameDisplay.blit(background1,(0+350,380))  #bottom part display
-            
-             #bottom guys display
-            
-            if leftdown==leftman or leftdown==rightman:
-                gameDisplay.blit(leftdown,(leftdownmove,400))
-                
-             
-            if rightdown==leftman or rightdown==rightman:
-                gameDisplay.blit(rightdown,(rightdownmove,400))
-            
-            
-            #bottom spikes
-            
-            if orientation2==0 and y_axis2>380:
-                x_axis2=350
-                gameDisplay.blit(lspike,(x_axis2,y_axis2))
-            
-            if orientation2==1 and y_axis2>380:
-                x_axis2=589
-                gameDisplay.blit(rspike,(x_axis2,y_axis2))
-            
-            
-            if orientation4==0 and y_axisb>380:
-                x_axisb=659
-                gameDisplay.blit(lspike,(x_axisb,y_axisb))
-            
-            if orientation4==1 and y_axisb>380:
-                x_axisb=659+238
-                gameDisplay.blit(rspike,(x_axisb,y_axisb))
-            
-            
-            
-            
-            
-            
-            scores=font1.render(str(score),1,(0,0,0)) 
-            gameDisplay.blit(scores,(200+650,30))
-            
-            
-            
-            
-            
-            if leftquad.get_rect(center=(leftmove+5,30+10)).collidepoint(x_axis1+8,y_axis1):
-              #or leftquad.get_rect(center=(leftmove+5,100+10)).collidepoint(x_axis2+8,y_axis2):
-                pygame.mixer.music.load("data/sound/fall.wav")
-                pygame.mixer.music.play(0)
-                #collide.play(0)
-                return score
-            
-            if midquad.get_rect(center=(midmove+5,30+10)).collidepoint(x_axisa+8,y_axisa):
-              #or midquad.get_rect(center=(midmove+5,100+10)).collidepoint(x_axisb+8,y_axisb):
-                pygame.mixer.music.load("data/sound/fall.wav")
-                pygame.mixer.music.play(0)
-                #collide.play(0)
-                return score
-            
-            
-            if rightquad.get_rect(center=(rightmove+5,30+10)).collidepoint(x_axisx+8,y_axisx):
-              
-                pygame.mixer.music.load("data/sound/fall.wav")
-                pygame.mixer.music.play(0)
-                #collide.play(0)
-                return score
-            
-            #bottom boy collision collision detection
-            
-            if leftdown.get_rect(center=(leftdownmove+5,400+10)).collidepoint(x_axis2+8,y_axis2):
-             
-                pygame.mixer.music.load("data/sound/fall.wav")
-                pygame.mixer.music.play(0)
-                #collide.play(0)
-                return score
-            
-            
-            if rightdown.get_rect(center=(rightdownmove+5,400+10)).collidepoint(x_axisb+8,y_axisb):
-              
-                pygame.mixer.music.load("data/sound/fall.wav")
-                pygame.mixer.music.play(0)
-                #collide.play(0)
-                return score
-            
-            
-            
+            else:
+                gameDisplay.blit(pane6,(390,350))  # 6pane
                 
             
             
             
             
+            gameDisplay.blit(maxnormal,(540,200))
+            gameDisplay.blit(maxnightmare,(410,300))
+            gameDisplay.blit(maxfear,(560,300))
+            gameDisplay.blit(maxinferno,(700,300))
+            gameDisplay.blit(maximpossible,(560,410))
+            gameDisplay.blit(maxcardiac,(560,510))
+            
+            
+            
+            
+            if os.path.getsize("score.pkl") >0:
+            
+                with open('score.pkl', 'rb') as input:    #REading
+                    maxscore = pickle.load(input)
+            
+            maxnormal=maxscore[0]
+            maxnightmare=maxscore[1]
+            maxfear=maxscore[2]
+            maxinferno=maxscore[3]
+            maximpossible=maxscore[4]
+            maxcardiac=maxscore[5]
+            
+                
+            '''   
+            
+            
+            
+            f=1
+            #press=0
             pygame.display.update()
-            clock.tick(60)
+            clock.tick(120)
      
             if crashed==True:                                   # Game crash or Close check
                 pygame.quit()
@@ -591,6 +321,8 @@ class pane5window:
         if crashed==True:
             pygame.quit()
             sys.exit()
-
-
             
+
+if __name__ == "__main__":
+    g = game()
+    g.make()         
