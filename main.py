@@ -27,6 +27,7 @@ import gtk
 import pickle
 import pygame
 import sys
+import math
 
 
 
@@ -74,10 +75,12 @@ class game:
             
         angle=0                                                        # Loading assets
         ball=pygame.image.load("data/images/ball.png")
+        ball=pygame.transform.scale(ball,(10,10))
+        
         pygame.draw.circle(gameDisplay,white,(100,100),10,0)
         
         
-        pad2=pad=pygame.image.load("data/images/pad.png")           # pad transform
+        pad2=pad=pygame.image.load("data/images/ball.png")           # pad transform
         pad2=pad=pygame.transform.scale(pad,(120,20))
         pad=pygame.transform.rotate(pad,angle)
         
@@ -101,8 +104,9 @@ class game:
         f1=f2=0
         
         xrightflag=-1
-        upperhalf=0
+        upperhalf=False
         xcor=625
+        ycor=384
         
         padangle=0
         
@@ -160,6 +164,11 @@ class game:
                 zcf=0
             
             
+            
+            
+            
+            
+            
             color=(xcolor,ycolor,zcolor)
                 
             pygame.draw.rect(gameDisplay, color,(40,40,100,20), 0) 
@@ -168,14 +177,38 @@ class game:
             
             pygame.draw.circle(gameDisplay,white,(683,384),5,0)
             
-            pad=pygame.transform.rotate(pad2, angle)
-            gameDisplay.blit(pad,(xcor,555))
+            
+            newxcor=xcor
+            
+            if(xcor<683):
+                newxcor=683+(683-xcor)
+            
+           
+            if(upperhalf==True):
+                ycor=384+(int)(math.sqrt(abs((180**2)-(newxcor-683)**2)))
+                
+            if(upperhalf==False):
+                ycor=384-(int)(math.sqrt(abs((180**2)-(newxcor-683)**2)))
+            
+            
+            
+            #ycor=(int)(math.sqrt(abs((180**2)-(xcor**2))))
+            #print ycor
+            #print (math.sqrt(abs((180**2)-(xcor**2))))
+            
+            
+            #pad=pygame.transform.rotate(pad2, angle)
+            
+            #print (int)(math.sqrt(abs((180**2)-(newxcor-683)**2)))
+            gameDisplay.blit(ball,(683,ycor))
+            gameDisplay.blit(ball,(xcor,384))
+            print xcor
             
             '''
             if(angle>=359 and f1==1):
                 angle=0
                 
-            if(angle<=1 and f2==1):
+            if(angle<=1 and f2==1):gg
                 angle=360
                 
             if(angle>=(-1) and f1==1):
@@ -202,40 +235,40 @@ class game:
             '''          
                       
                       
-            if(xcor>=805 and xrightflag!=-1 ):
+            if(xcor>=863 and xrightflag!=-1 ):
                 #xrightflag=0
                 upperhalf=not(upperhalf)
                 
             
                 
                 
-            if(xcor<=445 and xrightflag!=-1 ):
+            if(xcor<=503 and xrightflag!=-1 ):
                 #xrightflag=1
                 upperhalf=not(upperhalf)
                 
             
                 
                 
-            if(upperhalf==0):               # Down Case
+            if(upperhalf==False):               # Down Case
                 if(xrightflag==1):
                     xcor+=1
                 if(xrightflag==0):
                     xcor-=1
-            if(upperhalf==1):               # Upper Case
+            if(upperhalf==True):               # Upper Case
                 if(xrightflag==1):
                     xcor-=1
                 if(xrightflag==0):
                     xcor+=1
                 
                 
-                
+            '''    
            
             if(f1==1 and f2==0):
                 angle+=1
             
             if(f2==1 and f1==0):
                 angle-=1
-            
+            '''
                   
                 
             '''    
@@ -256,7 +289,7 @@ class game:
             
             #print press
             if(press[len(press)-47]):               #left key press check
-                print "left" 
+                #print "left" 
                 xrightflag=0
                 f1=1
                 f2=0
@@ -264,7 +297,7 @@ class game:
              
              
             if(press[len(press)-48]):               #right key press check
-                print "right"  
+                #print "right"  
                 xrightflag=1
                 f1=0
                 f2=1
