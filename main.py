@@ -200,8 +200,8 @@ class game:
             #pad=pygame.transform.rotate(pad2, angle)
             
             #print (int)(math.sqrt(abs((180**2)-(newxcor-683)**2)))
-            gameDisplay.blit(ball,(683,ycor))
-            gameDisplay.blit(ball,(xcor,384))
+            #gameDisplay.blit(ball,(683,ycor))
+            gameDisplay.blit(ball,(xcor,ycor))
             print xcor
             
             '''
@@ -235,14 +235,14 @@ class game:
             '''          
                       
                       
-            if(xcor>=863 and xrightflag!=-1 ):
+            if(xcor>863 and xrightflag!=-1 ):
                 #xrightflag=0
                 upperhalf=not(upperhalf)
                 
             
                 
                 
-            if(xcor<=503 and xrightflag!=-1 ):
+            if(xcor<503 and xrightflag!=-1 ):
                 #xrightflag=1
                 upperhalf=not(upperhalf)
                 
